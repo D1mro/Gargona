@@ -1,0 +1,269 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #333; /* Цвет фона панели */
+    overflow: hidden; /* Скрыть переполнение */
+    position: fixed; /* Фиксированное положение */
+    top: 0; /* Расположение вверху */
+    width: 100%; /* Ширина на всю страницу */
+    z-index: 1000; /* Убедитесь, что панель находится выше других элементов */
+}
+
+.navbar ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Используем flexbox для горизонтального расположения */
+}
+
+.navbar li {
+    flex: 1; /* Каждый элемент занимает равное пространство */
+}
+
+.navbar a {
+    display: block; /* Делаем ссылку блочным элементом */
+    color: white; /* Цвет текста */
+    text-align: center; /* Выравнивание текста по центру */
+    padding: 1.5vh 2%; /* Отступы */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+.navbar a:hover {
+    background-color: #ddd; /* Цвет фона при наведении */
+    color: black; /* Цвет текста при наведении */
+}
+
+#chat {
+    width: 50%; /* Ширина области чата */
+    max-height: 80vh; /* Максимальная высота области чата */
+    border-radius: 1px solid black;
+    padding: 2vh; /* Отступы внутри области чата */
+    overflow-y: auto; /* Прокрутка по вертикали */
+    position: fixed; /* Фиксированное положение */
+    bottom: 15vh; /* Расположение над полем ввода */
+    right: 3%; /* Расположение справа */
+    background-color: white; /* Цвет фона области чата */
+    display: flex; /* Используем flexbox для вертикального расположения сообщений */
+    flex-direction: column; /* Новые сообщения внизу */
+    align-items: flex-end; /* Выравнивание сообщений по правому краю */
+    margin-right: 20%; /* Центрирование области чата */
+}
+
+.message {
+    margin: 1vh; 
+    padding: 2vh; 
+    border-radius: 5px; 
+    max-width: 60%; /* Максимальная ширина сообщения */
+    background-color: rgb(255, 255, 255); /* Цвет фона для отправленных сообщений */
+    border-radius: 1px solid #030000; /* Граница сообщения */
+    align-self: flex-end; /* Сообщения выравниваются вправо */
+    color: rgb(0, 0, 0);
+}
+
+#input_text {
+    width: 46.5%; /* Поле ввода занимает всю ширину контейнера */
+    height: 3vh; /* Высота поля ввода */
+    border-radius: 5px; 
+    padding: 1vh 5% 1vh 1%; /* Отступы: сверху, справа, снизу, слева */
+    font-size: 2.5vh; /* Размер шрифта */
+    border: 1px solid rgba(0, 0, 0, 0.2); /* Едва заметная черная рамка */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Плавный переход для тени и цвета рамки */
+    margin-top: 86vh; /* Отступ сверху */
+    margin-left: 24.47%; /* Отступ слева */
+    position: fixed;
+}
+
+#input_text:hover {
+    box-shadow: 0 0 0.5vh rgba(0, 0, 0, 0.5); /* Легкая тень при наведении */
+    border-color: rgba(0, 0, 0, 0.5); /* Увеличиваем цвет рамки при наведении */
+}
+
+/* Убираем обводку при фокусе */
+#input_text:focus {
+    outline: none; /* Убираем стандартную обводку */
+    border-color: rgba(0, 0, 0, 0.2); /* Сохраняем цвет рамки при фокусе */
+    box-shadow: none; /* Убираем тень при фокусе */
+}
+
+.button-container {
+    position: fixed; /* Фиксированное положение для контейнера */
+    top: 50%; /* Центрирование по вертикали */
+    left: 50%; /* Центрирование по горизонтали */
+    transform: translate(-50%, -50%); /* Сдвиг на половину ширины и высоты для центрирования */
+    display: flex;
+    flex-direction: row; /* Горизонтальное расположение кнопок */
+    gap: 2%; /* Отступы между кнопками */
+}
+
+.button {
+    padding: 5vh 3%; /* Уменьшено для лучшего отображения */
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.button:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Тень при наведении */
+    border-color: rgba(0, 0, 0, 0.3); /* Увеличиваем цвет рамки при наведении */
+    transform: scale(1.05); /* Увеличиваем кнопку при наведении */
+}
+
+.button:focus {
+    outline: none; /* Убираем стандартную обводку */
+    border-color: rgba(0, 0, 0, 0.2); /* Сохраняем цвет рамки при фокусе */
+    box-shadow: none; /* Убираем тень при фокусе */
+}
+
+#sendButton {
+    margin-top: 86.5vh; /* Высота кнопки */
+    position: fixed;
+    margin-left: 74.2%; /* Положение кнопки */
+    height: 4vh; /* Высота кнопки */
+    border-radius: 100px; /* Закругление углов */
+    cursor: pointer; /* Курсор при наведении */
+    background-color: #030000; /* Черный цвет фона */
+    width: 4vh; /* Ширина кнопки */
+    border: none; /* Убираем границу */
+    transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease; /* Плавный переход для фона, границ и цвета текста */
+    color: white; /* Цвет текста по умолчанию (белый) */
+    font-size: 2.5vh; /* Размер шрифта для стрелки */
+    padding-bottom: 0.3vh; /* Отступ сверху для поднятия стрелки */
+    line-height: 1; /* Устанавливаем высоту строки для центрирования */
+}
+
+#sendButton:hover {
+    background-color: white; /* Цвет фона при наведении */
+    border: 1px solid rgba(0, 0, 0, 0.2); /* Едва заметная черная рамка при наведении */
+    color: #030000; /* Цвет текста при наведении (черный) */
+}
+
+.message {
+    margin: 1vh 0; /* Отступ сверху и снизу, чтобы создать пространство между сообщениями */
+    padding: 2vh; 
+    border-radius: 7%; /* Делаем сообщения круглыми */
+    max-width: 300px; /* Максимальная ширина сообщения в пикселях */
+    background-color: rgb(255, 255, 255); /* Цвет фона для отправленных сообщений */
+    border: 1px solid #030000; /* Граница сообщения */
+    align-self: flex-end; /* Сообщения выравниваются вправо */
+    color: rgb(0, 0, 0);
+    word-wrap: break-word; /* Перенос слов */
+    overflow-wrap: break-word; /* Поддержка для современных браузеров */
+}
+
+.user-message {
+    background-color: #ffffff;
+    align-self: flex-end; /* Сообщения пользователя справа */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    word-wrap: break-word; /* Перенос слов */
+    overflow-wrap: break-word; /* Поддержка для современных браузеров */
+    border: 1px solid #ccc; /* Для визуализации */
+    padding: 1vh; /* Отступы */
+    border-radius: 5px; /* Делаем сообщения круглыми */
+    max-width: 300px; /* Максимальная ширина сообщения в пикселях */
+    margin: 1vh 0; /* Отступ сверху и снизу */
+}
+
+.bot-message {
+    background-color: #302f2f;
+    align-self: flex-start; /* Ответы бота слева */
+    color: white;
+    word-wrap: break-word; /* Перенос слов */
+    overflow-wrap: break-word; /* Поддержка для современных браузеров */
+    border: 1px solid #ccc; /* Для визуализации */
+    padding: 1vh; /* Отступы */
+    border-radius: 5px; /* Делаем сообщения круглыми */
+    max-width: 300px; /* Максимальная ширина сообщения в пикселях */
+    margin: 1vh 0; /* Отступ сверху и снизу */
+}
+
+input[type="text"] {
+    width: 70%;
+    padding: 2vh; /* Отступы */
+    margin-right: 2%; /* Отступ справа */
+}
+
+.button {
+    margin: 1vh; /* Отступы между кнопками */
+}
+
+#uploadButton {
+    background-color: #4CAF50; /* Зеленый цвет */
+    color: white; /* Белый текст */
+    padding: 10px 20px; /* Отступы */
+    border: none; /* Без границы */
+    border-radius: 5px; /* Закругленные углы */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+#uploadButton:hover {
+    background-color: #45a049; /* Темно-зеленый при наведении */
+}
+
+#phoneInputContainer{
+    margin-top: 50px;
+}
+
+
+
+
+@media(max-width: 992px){
+    #sendButton{
+        margin-left: 73%;
+    }
+}
+
+@media(max-width: 768px){
+    #sendButton{
+        margin-left: 72%;
+    }
+}
+
+@media(max-width: 480px){
+    #sendButton{
+        margin-left: 69%;
+    }
+}
+
+@media(max-width: 375px){
+    #sendButton{
+        margin-left: 66%;
+    }
+}
+@media(max-width: 1024px){
+    #sendButton{
+        margin-left: 71%;
+    }
+}
+@media(max-width: 344px){
+    #sendButton{
+        margin-left: 66%;
+    }
+}
+
+@media(max-width: 430px) and (max-width: 932px) {
+    #sendButton{
+        margin-left: 67%;
+    }
+}
+
+
+@media(max-width: 430px) and (max-width: 932px) {
+    .button{
+        padding: 1vh;
+    }
+}
+
+
+
+
+
+
+
+

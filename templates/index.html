@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gargona</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <ul>
+            <li><a href="#home">Главная</a></li>
+            <li><a href="#news">Каталог</a></li>
+            <li><a href="#contact">Наши работы</a></li>
+            <li><a href="#about">О нас</a></li>
+        </ul>
+    </div>
+    
+    <div id="startContainer" style="text-align: center; margin-top: 20%;">
+        <button id="startButton">Старт</button>
+    </div>
+
+    <div id="chatContainer" style="display: none;">
+        <input type="text" placeholder="Ваш запрос..." id="input_text">
+        <button id="sendButton">↑</button>
+        <div id="chat"></div>
+    
+        <div class="button-container">
+            <button class="button" data-question="1">Какие камни у вас есть?</button>
+            <button class="button" data-question="2">Сколько в среднем занимает обработка?</button>
+            <button class="button" data-question="3">Сколько камней у вас из России?</button>
+            <button id="contactButton" class="button">Оставить заявку для связи</button>
+            <input type="file" id="file_input" accept=".txt,.pdf,.xlsx,.docx" style="display: none;">
+            <button id="uploadButton">📁</button>
+        </div>
+    
+        <div id="phoneInputContainer" style="display: none;">
+            <input type="text" placeholder="Введите ваше имя" id="nameInput">
+            <input type="text" placeholder="Введите номер телефона" id="phoneInput">
+            <button id="submitButton">Отправить</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+    // Константы
+    const ERROR_MESSAGE = 'Извините, произошла ошибка. Пожалуйста, попробуйте позже.';
+    
+    // Инициализация чата
+    $('#startButton').click(initializeChat);
+
+    // Отправка сообщения
+    $('#sendButton').click(sendMessage);
+    $('#input_text').keypress(function(e) {
+        if (e.which === 13) sendMessage();
+    });
+
+    // Быстрые кнопки вопросов
+    $('.quick-question').click(function() {
+        const question = $(this).text();
+        processUserMessage(question);
+    });
+
+    // Форма контактов
+    $('#contactButton').click(function() {
+        $('#contactFormContainer').toggleClass('d-none');
+    });
+
+    $('#submitContact').click(submitContactForm);
+
+    // Загрузка файла (если нужно оставить)
+    $('#uploadButton').click(function() {
+        $('#file_input').click();
+    });
+
+    $('#file_input').change(handleFileUpload);
+
+    // Основные функции
+    function initializeChat() {
+        $('#startContainer').hide();
+        $('#chatContainer').show();
+        
+        $.post('/start')
+            .done(function(data) {
+                addMessage(data.text, 'bot');
+            })
+            .fail(handleError);
+    }
+
+    function sendMessage() {
+        const message = $('#input_text').val().trim();
+        if (!message) return;
+        
+        processUserMessage(message);
+        $('#input_text').val('');
+    }
+
+    function processUserMessage(message) {
+        addMessage(message, 'user');
+        
+        $.post('/chat', { message: message })
+            .done(function(data) {
+                if (data.error) {
+                    addMessage(ERROR_MESSAGE, 'bot');
+                    console.error('Server error:', data.error);
+                } else {
+                    addMessage(data.text, 'bot');
+                }
+            })
+            .fail(handleError);
+    }
+
+    function submitContactForm() {
+        const name = $('#nameInput').val().trim();
+        const phone = $('#phoneInput').val().trim();
+        
+        if (!name || !phone) {
+            showAlert('Пожалуйста, заполните все поля.', 'warning');
+            return;
+        }
+        
+        $.post('/submit_contact', { name: name, phone: phone })
+            .done(function(data) {
+                if (data.status === 'success') {
+                    showAlert('✅ ' + data.message, 'success');
+                    resetContactForm();
+                } else {
+                    showAlert('⚠️ ' + data.message, data.status || 'warning');
+                }
+            })
+            .fail(function() {
+                showAlert('Ошибка соединения с сервером', 'danger');
+            });
+    }
+
+    function handleFileUpload() {
+        const file = this.files[0];
+        if (!file) return;
+        
+        const instructions = prompt("Введите указания для ассистента:");
+        if (!instructions) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('instructions', instructions);
+        
+        $.ajax({
+            url: '/upload_file',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                addMessage(`Отправлен файл: ${file.name}`, 'user');
+                addMessage(data.text || ERROR_MESSAGE, 'bot');
+            },
+            error: handleError
+        });
+    }
+
+    // Вспомогательные функции
+    function addMessage(text, sender) {
+        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const messageHtml = `
+            <div class="message ${sender}-message">
+                <div class="message-content">${text}</div>
+                <div class="message-time">${timestamp}</div>
+            </div>
+        `;
+        $('#chat').append(messageHtml);
+        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+    }
+
+    function showAlert(message, type) {
+        const alertHtml = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        $('#alertsContainer').append(alertHtml);
+        
+        // Автоматическое закрытие через 5 секунд
+        setTimeout(() => {
+            $('.alert').alert('close');
+        }, 5000);
+    }
+
+    function handleError(xhr, status, error) {
+        console.error('Error:', status, error);
+        addMessage(ERROR_MESSAGE, 'bot');
+        showAlert('Ошибка соединения с сервером', 'danger');
+    }
+
+    function resetContactForm() {
+        $('#contactFormContainer').addClass('d-none');
+        $('#nameInput').val('');
+        $('#phoneInput').val('');
+        $('#file_input').val('');
+    }
+});
+    </script>
+</body>
+</html>
