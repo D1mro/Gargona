@@ -1,6 +1,5 @@
 flask==3.0.2
-openai==1.10.0
+openai==0.28.1  # Используем старую стабильную версию
 python-dotenv==1.0.0
-gunicorn==21.2.0  # Обязательно для работы на Render
-email-validator==2.0.0  # Для проверки email
-python-dotenv==1.0.0  # Для локального тестирования .env
+gunicorn==21.2.0
+email-validator==2.0.0
