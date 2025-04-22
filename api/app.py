@@ -7,7 +7,7 @@ from openai import OpenAI
 import os
 from typing import List, Dict, Optional
 
-app = Flask(__name__, static_folder='../static', template_folder='../templates')
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # Конфигурация (рекомендуется использовать переменные окружения)
 class Config:
