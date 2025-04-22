@@ -3,5 +3,4 @@ openai==1.12.0
 python-dotenv==1.0.0
 gunicorn==21.2.0  # Обязательно для работы на Render
 email-validator==2.0.0  # Для проверки email
-smtplib  # Уже в стандартной библиотеке Python, но явно указываем для прозрачности
 python-dotenv==1.0.0  # Для локального тестирования .env
