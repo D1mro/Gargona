@@ -23,7 +23,10 @@ class Config:
     MAX_HISTORY = 10
 
 # Инициализация клиента OpenAI
-client = OpenAI(api_key=Config.OPENAI_API_KEY)
+from openai import AzureOpenAI  # Или OpenAI для обычного API
+client = AzureOpenAI(
+    api_key=Config.OPENAI_API_KEY,
+    api_version="2023-05-15"
 
 
 
