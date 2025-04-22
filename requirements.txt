@@ -1,5 +1,5 @@
 flask==3.0.2
-openai==1.12.0
+openai==1.10.0
 python-dotenv==1.0.0
 gunicorn==21.2.0  # Обязательно для работы на Render
 email-validator==2.0.0  # Для проверки email
